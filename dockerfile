@@ -1,4 +1,4 @@
 FROM nginx:latest
-COPY ./html /usr/share/nginx/html
+RUN service nginx status
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
