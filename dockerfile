@@ -1,5 +1,4 @@
-FROM ubuntu:22.04
-
-RUN apt update && apt install -y curl
-
-CMD ["echo", "Hello from Docker image!"]
+FROM nginx:latest
+COPY ./html /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
