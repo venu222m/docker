@@ -1,12 +1,8 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- main
+  - main
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
@@ -18,12 +14,14 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: ubuntu-latest
+      vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/dockerfile'
-        tags: |
-          $(tag)
+      - task: Docker@2
+        displayName: Build and Push Docker Image
+        inputs:
+          containerRegistry: 'dockerhub'
+          repository: 'venutej220/test'
+          command: 'buildAndPush'
+          dockerfile: '**/Dockerfile'
+          tags: |
+            $(tag)
