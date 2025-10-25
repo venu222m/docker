@@ -1,0 +1,72 @@
+You’ll see it running at http://localhost:3000 (inside the server).
+
+Press Ctrl + C to stop it.
+
+🐳 Step 4: Create Dockerfile
+
+Inside your my-react-app folder, create a file named Dockerfile:
+
+nano Dockerfile
+
+
+Paste this:
+
+# Step 1: Build React app
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Step 2: Serve using Nginx
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+Save (Ctrl+O, Enter, Ctrl+X).
+
+🏗️ Step 5: Build Docker image
+
+From inside the React app directory:
+
+docker build -t react-app .
+
+▶️ Step 6: Run the container
+
+Run it on port 3000:
+
+docker run -d -p 3000:80 --name react-container react-app
+
+
+Check if it’s running:
+
+docker ps
+
+
+You’ll see something like:
+
+CONTAINER ID   IMAGE        COMMAND                  PORTS                  NAMES
+abcd1234       react-app    "nginx -g 'daemon off;'" 0.0.0.0:3000->80/tcp   react-container
+
+🌍 Step 7: Access it from outside
+
+Find your public IP:
+
+curl ifconfig.me
+
+
+Then open in your browser:
+
+http://<your-server-ip>:3000
+
+
+✅ You should see your React app running via Docker!
+
+🧹 Optional: Manage containers
+docker stop react-container      # Stop container
+docker start react-container     # Start container again
+docker logs -f react-container   # View logs
+docker rm -f react-container  
